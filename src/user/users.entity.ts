@@ -15,6 +15,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ nullable: true })
+  session: string;
+
   @OneToMany((Type) => Workspace, (workspace) => workspace.user)
   workspaces: Workspace[];
 }

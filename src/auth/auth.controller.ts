@@ -1,6 +1,17 @@
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Get,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
+import { AuthGuard } from './guards/auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -8,7 +19,20 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto.email, signInDto.password);
+  async signIn(@Request() req, @Body() signInDto: SignInDto) {
+    const publicIp =
+      req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    return this.authService.signIn(
+      signInDto.email,
+      signInDto.password,
+      publicIp,
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('me')
+  @ApiBearerAuth('JWT-auth')
+  async getMe(@Request() req) {
+    return req['user'];
   }
 }

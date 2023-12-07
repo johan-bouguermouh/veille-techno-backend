@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { User } from './users.entity';
 import { CreateUserForm } from './interfaces/user.interface';
 import { CreateUserDto } from './dto/createUser.dto';
@@ -34,5 +34,13 @@ export class UsersService {
 
   async remove(id: number): Promise<void> {
     await this.usersRepository.delete(id);
+  }
+
+  async updateRefreshToken(id: number, session: string): Promise<void> {
+    await this.usersRepository.update(id, { session });
+  }
+
+  async logout(id: number): Promise<void> {
+    await this.usersRepository.update(id, { session: null });
   }
 }
