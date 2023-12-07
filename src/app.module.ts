@@ -11,6 +11,8 @@ import { WorkspacesHttpModule } from './workspace/workspaces-http.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesService } from './roles/roles.service';
 import { RolesModule } from './roles/roles.module';
+import { ColumnModule } from './column/column.module';
+import { ColumnHttpModule } from './column/column-http.module';
 
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { RolesModule } from './roles/roles.module';
     WorkspacesHttpModule,
     AuthModule,
     RolesModule,
+    ColumnHttpModule,
   ],
   controllers: [AppController],
   providers: [AppService, RolesService],

@@ -6,7 +6,7 @@ import { Workspace } from './workspaces.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Workspace])],
-  exports: [TypeOrmModule.forFeature([Workspace])],
+  exports: [TypeOrmModule.forFeature([Workspace]), WorkspacesService],
   providers: [WorkspacesService],
   controllers: [WorkspacesController],
 })
