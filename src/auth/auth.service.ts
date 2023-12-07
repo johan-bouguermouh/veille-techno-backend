@@ -51,7 +51,7 @@ export class AuthService {
     if (user?.password !== pass) {
       throw new UnauthorizedException();
     }
-    console.log('hashPublicIp', publicIp);
+
     const hashPublicIp = await bcrypt.hash(publicIp, process.env.SALT_ROUNDS);
     await this.usersService.updateRefreshToken(user.id, hashPublicIp);
 

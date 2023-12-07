@@ -9,6 +9,8 @@ import { UserHttpModule } from './user/users-http.module';
 import { UsersModule } from './user/users.module';
 import { WorkspacesHttpModule } from './workspace/workspaces-http.module';
 import { AuthModule } from './auth/auth.module';
+import { RolesService } from './roles/roles.service';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -27,8 +29,9 @@ import { AuthModule } from './auth/auth.module';
     UserHttpModule,
     WorkspacesHttpModule,
     AuthModule,
+    RolesModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RolesService],
 })
 export class AppModule {}

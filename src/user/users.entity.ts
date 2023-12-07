@@ -1,5 +1,12 @@
+import { Role } from 'src/roles/roles.entity';
 import { Workspace } from 'src/workspace/workspaces.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -20,4 +27,7 @@ export class User {
 
   @OneToMany((Type) => Workspace, (workspace) => workspace.user)
   workspaces: Workspace[];
+
+  @ManyToOne((Type) => Role, (role) => role.users)
+  role: Role;
 }
