@@ -1,4 +1,5 @@
 import { Role } from 'src/roles/roles.entity';
+import { Task } from 'src/task/entities/task.entity';
 import { Workspace } from 'src/workspace/workspaces.entity';
 import {
   Entity,
@@ -30,4 +31,7 @@ export class User {
 
   @ManyToOne((Type) => Role, (role) => role.users)
   role: Role;
+
+  @OneToMany((Type) => Task, (task) => task.author)
+  tasks: Task[];
 }

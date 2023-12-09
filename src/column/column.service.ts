@@ -18,7 +18,12 @@ export class ColumnService {
     const { workspaceId, name, order } = createColumnDto;
     const column = new ColumnList();
 
-    //Si order et défini on récupère toutes les columns appartenant au workspace et dont l'order est supérieur à celui de la nouvelle colonne et on les décale d'un cran
+    /**
+     * Si order est défini
+     * on récupère toutes les columns appartenant au workspace
+     * et dont l'order est supérieur à celui de la nouvelle colonne
+     * alors on les décale d'un cran
+     */
     if (order !== undefined && order >= 0) {
       const columns = await this.columnsRepository.find({
         where: {
@@ -33,6 +38,7 @@ export class ColumnService {
         this.columnsRepository.save(column);
       });
     }
+
     column.name = name;
     column.order =
       typeof order == 'undefined'

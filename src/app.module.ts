@@ -13,6 +13,7 @@ import { RolesService } from './roles/roles.service';
 import { RolesModule } from './roles/roles.module';
 import { ColumnModule } from './column/column.module';
 import { ColumnHttpModule } from './column/column-http.module';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ColumnHttpModule } from './column/column-http.module';
     AuthModule,
     RolesModule,
     ColumnHttpModule,
+    TaskModule,
   ],
   controllers: [AppController],
   providers: [AppService, RolesService],

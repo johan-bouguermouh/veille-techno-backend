@@ -1,3 +1,4 @@
+import { Task } from 'src/task/entities/task.entity';
 import { Workspace } from 'src/workspace/workspaces.entity';
 import {
   Entity,
@@ -18,8 +19,8 @@ export class ColumnList {
   @Column()
   order: number;
 
-  // @OneToMany((Type) => Task, (task) => task.column)
-  // tasks: Task[];
+  @OneToMany((Type) => Task, (task) => task.column)
+  tasks: Task[];
 
   @ManyToOne((Type) => Workspace, (workspace) => workspace.columns)
   workspace: Workspace;

@@ -7,7 +7,7 @@ import { WorkspacesModule } from 'src/workspace/workspaces.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ColumnList]), WorkspacesModule],
-  exports: [TypeOrmModule.forFeature([ColumnList])],
+  exports: [TypeOrmModule.forFeature([ColumnList]), ColumnService],
   controllers: [ColumnController],
   providers: [ColumnService],
 })
