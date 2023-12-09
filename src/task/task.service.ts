@@ -3,9 +3,10 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
-import { Repository, MoreThanOrEqual } from 'typeorm';
+import { Repository, MoreThanOrEqual, IsNull } from 'typeorm';
 import { ColumnService } from 'src/column/column.service';
 import { UserAuth } from 'src/auth/auth.decorator';
+import { GetInfoTaskDto } from './dto/get-info-task.dto';
 
 @Injectable()
 export class TaskService {
@@ -100,21 +101,75 @@ export class TaskService {
     return `This action returns all task`;
   }
 
-  findAllByColumn(columnId: number) {
-    return this.tasksRepository.find({
+  async findAllByColumn(columnId: number): Promise<GetInfoTaskDto[]> {
+    const targetedTasks = await this.tasksRepository.find({
       where: {
         column: {
           id: columnId,
         },
       },
+      relations: ['author'],
       order: {
         order: 'ASC',
       },
     });
+
+    if (!targetedTasks) {
+      throw new Error('Tasks not found');
+      // return {
+      //   message: 'Column not found',
+      //   status: 404,
+      // };
+    }
+    const result = await Promise.all(
+      targetedTasks.map(async (task: Task) => {
+        return new GetInfoTaskDto(
+          task,
+          await this.countChildren(task),
+          await this.countOpenChildren(task),
+        );
+      }),
+    );
+    return result;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} task`;
+  async findOne(taskId: number): Promise<GetInfoTaskDto> {
+    const targetedTask = await this.tasksRepository.findOne({
+      where: { id: taskId },
+      relations: ['author'],
+    });
+    if (!targetedTask) {
+      throw new Error('Task not found');
+      // return {
+      //   message: 'Task not found',
+      //   status: 404,
+      // };
+    }
+    return new GetInfoTaskDto(
+      targetedTask,
+      await this.countChildren(targetedTask),
+      await this.countOpenChildren(targetedTask),
+    );
+  }
+
+  /**
+   * Permets de compter le nombre d'enfants d'une tâche
+   * @param task Tâche cible sur laquelle on souhaite compter les enfants
+   * @returns {Promise<number>}
+   */
+  async countChildren(task: Task): Promise<number> {
+    return await this.tasksRepository.count({ where: { parent: task } });
+  }
+
+  /**
+   * Compte le nombre d'enfants ouverts d'une tâche
+   * @param task Tâche cible sur laquelle on souhaite compter les enfants ouverts
+   * @returns {Promise<number>}
+   */
+  async countOpenChildren(task: Task): Promise<number> {
+    return await this.tasksRepository.count({
+      where: { parent: task, completedAt: IsNull() },
+    });
   }
 
   update(id: number, updateTaskDto: UpdateTaskDto) {

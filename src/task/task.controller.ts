@@ -26,14 +26,14 @@ export class TaskController {
     return this.taskService.create(user, createTaskDto);
   }
 
-  @Get()
-  findAll() {
-    return this.taskService.findAll();
+  @Get('/column/:columnId')
+  findAll(@Param('columnId') columnId: string) {
+    return this.taskService.findAllByColumn(+columnId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.taskService.findOne(+id);
+  @Get(':taskId')
+  findOne(@Param('taskId') taskId: string) {
+    return this.taskService.findOne(+taskId);
   }
 
   @Patch(':id')

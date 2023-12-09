@@ -66,7 +66,10 @@ export class ColumnService {
   }
 
   async findOne(id: number): Promise<ColumnList | null> {
-    return this.columnsRepository.findOneBy({ id });
+    return this.columnsRepository.findOne({
+      where: { id },
+      relations: ['tasks', 'tasks.children'],
+    });
   }
 
   async update(
