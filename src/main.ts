@@ -1,10 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'; // add
+import { ValidationPipe } from '@nestjs/common';
+import { UniqueConstraintViolationFilter } from './filters/user-email-unique.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: '*',
+  });
   const config = new DocumentBuilder() // add
     .setTitle('NestJS API example')
     .setDescription(
@@ -27,6 +33,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config); // add
   SwaggerModule.setup('api', app, document); // add
+  app.useGlobalPipes(new ValidationPipe()); // add
+  app.useGlobalFilters(new UniqueConstraintViolationFilter()); // add
   await app.listen(3000);
 }
 bootstrap();

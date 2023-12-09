@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Role } from 'src/roles/roles.entity';
 import { Task } from 'src/task/entities/task.entity';
 import { Workspace } from 'src/workspace/workspaces.entity';
@@ -17,13 +18,15 @@ export class User {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true, name: 'email' })
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({ nullable: true })
+  @Exclude()
   session: string;
 
   @OneToMany((Type) => Workspace, (workspace) => workspace.user)
