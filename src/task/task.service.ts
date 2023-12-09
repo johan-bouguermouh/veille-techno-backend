@@ -1,4 +1,4 @@
-import { Injectable, Post, Response } from '@nestjs/common';
+import { Injectable, Post, Response, Inject, forwardRef } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +13,7 @@ export class TaskService {
   constructor(
     @InjectRepository(Task)
     private tasksRepository: Repository<Task>,
+    @Inject(forwardRef(() => ColumnService))
     private columnsService: ColumnService,
   ) {}
 

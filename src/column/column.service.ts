@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { CreateColumnDto } from './dto/create-column.dto';
 import { UpdateColumnDto } from './dto/update-column.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ColumnList } from './entities/columns.entity';
 import { MoreThanOrEqual, Repository } from 'typeorm';
 import { WorkspacesService } from '../workspace/workspaces.service';
+import { TaskService } from './../task/task.service';
+import { GetInfoColumnDto } from './dto/get-info-column.dto';
 
 @Injectable()
 export class ColumnService {
@@ -12,9 +14,11 @@ export class ColumnService {
     @InjectRepository(ColumnList)
     private columnsRepository: Repository<ColumnList>,
     private workspacesService: WorkspacesService,
+    @Inject(forwardRef(() => TaskService))
+    private taskService: TaskService,
   ) {}
 
-  async create(createColumnDto: CreateColumnDto): Promise<ColumnList[]> {
+  async create(createColumnDto: CreateColumnDto): Promise<GetInfoColumnDto[]> {
     const { workspaceId, name, order } = createColumnDto;
     const column = new ColumnList();
 
@@ -52,8 +56,8 @@ export class ColumnService {
     return result;
   }
 
-  async findAllByWorkSpace(workspaceId: number): Promise<ColumnList[]> {
-    return this.columnsRepository.find({
+  async findAllByWorkSpace(workspaceId: number): Promise<GetInfoColumnDto[]> {
+    const targetedColumns = await this.columnsRepository.find({
       where: {
         workspace: {
           id: workspaceId,
@@ -63,13 +67,30 @@ export class ColumnService {
         order: 'ASC',
       },
     });
+    if (targetedColumns.length === 0) {
+      throw new Error('Workspace not found');
+    }
+
+    const result = await Promise.all(
+      targetedColumns.map(async (column): Promise<GetInfoColumnDto> => {
+        const tasks = await this.taskService.findAllByColumn(column.id);
+        return { ...column, tasks };
+      }),
+    );
+
+    return result;
   }
 
-  async findOne(id: number): Promise<ColumnList | null> {
-    return this.columnsRepository.findOne({
+  async findOne(id: number): Promise<GetInfoColumnDto> {
+    const targetColumn = await this.columnsRepository.findOne({
       where: { id },
-      relations: ['tasks', 'tasks.children'],
     });
+    if (!targetColumn) {
+      throw new Error('Column not found');
+    }
+
+    const result = await this.taskService.findAllByColumn(targetColumn.id);
+    return { ...targetColumn, tasks: result };
   }
 
   async update(
