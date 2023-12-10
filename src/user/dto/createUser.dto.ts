@@ -33,8 +33,9 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @MinLength(12)
+  @MaxLength(59)
   @ApiProperty({
-    description: 'Password of the user',
+    description: 'Password of the user, must be strong and limited to 59 chars',
     type: String,
     required: true,
     example: 'Password_123!NotSimple',

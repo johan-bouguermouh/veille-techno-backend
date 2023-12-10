@@ -28,7 +28,7 @@ export class User {
   @Column()
   @Exclude()
   @MaxLength(59)
-  @MinLength(8)
+  @MinLength(12)
   password: string;
 
   @Column({ nullable: true })

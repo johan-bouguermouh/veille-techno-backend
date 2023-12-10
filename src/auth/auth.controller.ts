@@ -12,7 +12,7 @@ import {
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
 import { AuthGuard } from './guards/auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Authentification')
 @Controller('auth')
@@ -21,6 +21,11 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @ApiOperation({
+    summary: 'Login',
+    description:
+      'Login with email and password, return a JWT token and a refresh token',
+  })
   async signIn(@Request() req, @Body() signInDto: SignInDto) {
     return this.authService.signIn(req, signInDto.email, signInDto.password);
   }
