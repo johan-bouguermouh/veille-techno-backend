@@ -3,6 +3,11 @@ import {
   ApiProperty,
   ApiPropertyOptional,
 } from '@nestjs/swagger';
+import {
+  IsWorkspaceExists,
+  IsWorkspaceExistsConstraint,
+} from 'src/workspace/decorator/is-workspace-exists.decorator';
+import { Workspace } from 'src/workspace/workspaces.entity';
 
 export class CreateColumnDto {
   @ApiProperty({
@@ -11,7 +16,8 @@ export class CreateColumnDto {
     required: true,
     example: 1,
   })
-  workspaceId: number;
+  workspaceId: Workspace['id'];
+
   @ApiProperty({
     description: 'Name of the column',
     type: String,

@@ -1,4 +1,11 @@
-import { Injectable, Post, Response, Inject, forwardRef } from '@nestjs/common';
+import {
+  Injectable,
+  Post,
+  Inject,
+  forwardRef,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -66,7 +73,7 @@ export class TaskService {
         });
       }
     } else {
-      throw new Error('columnId or parentTaskId must be defined');
+      throw new BadRequestException('columnId or parentTaskId must be defined');
     }
 
     orderedBy =
@@ -116,11 +123,7 @@ export class TaskService {
     });
 
     if (!targetedTasks) {
-      throw new Error('Tasks not found');
-      // return {
-      //   message: 'Column not found',
-      //   status: 404,
-      // };
+      throw new NotFoundException('Tasks not found');
     }
     const result = await Promise.all(
       targetedTasks.map(async (task: Task) => {
@@ -140,11 +143,7 @@ export class TaskService {
       relations: ['author'],
     });
     if (!targetedTask) {
-      throw new Error('Task not found');
-      // return {
-      //   message: 'Task not found',
-      //   status: 404,
-      // };
+      throw new NotFoundException('Task not found');
     }
     return new GetInfoTaskDto(
       targetedTask,

@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  Module,
+  NestModule,
+  RequestMethod,
+  MiddlewareConsumer,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,6 +19,8 @@ import { RolesModule } from './roles/roles.module';
 import { ColumnModule } from './column/column.module';
 import { ColumnHttpModule } from './column/column-http.module';
 import { TaskModule } from './task/task.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { NotFoundInterceptor } from './errors/not-found.interceptor';
 
 @Module({
   imports: [
@@ -37,6 +44,14 @@ import { TaskModule } from './task/task.module';
     TaskModule,
   ],
   controllers: [AppController],
-  providers: [AppService, RolesService],
+  providers: [
+    AppService,
+    RolesService,
+    { provide: APP_INTERCEPTOR, useClass: NotFoundInterceptor },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply().forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

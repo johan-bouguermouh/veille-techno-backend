@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'; // add
-import { ValidationPipe } from '@nestjs/common';
+import { NotFoundException, ValidationPipe } from '@nestjs/common';
 import { UniqueConstraintViolationFilter } from './filters/user-email-unique.filter';
+import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -34,7 +35,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config); // add
   SwaggerModule.setup('api', app, document); // add
   app.useGlobalPipes(new ValidationPipe()); // add
-  app.useGlobalFilters(new UniqueConstraintViolationFilter()); // add
+  app.useGlobalFilters(new UniqueConstraintViolationFilter());
+  app.useGlobalFilters(new NotFoundExceptionFilter()); // add
   await app.listen(3000);
 }
 bootstrap();

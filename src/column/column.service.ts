@@ -1,4 +1,9 @@
-import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  forwardRef,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateColumnDto } from './dto/create-column.dto';
 import { UpdateColumnDto } from './dto/update-column.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,6 +24,14 @@ export class ColumnService {
   ) {}
 
   async create(createColumnDto: CreateColumnDto): Promise<GetInfoColumnDto[]> {
+    const workspaceExist = await this.workspacesService.doesWorkspaceExist(
+      createColumnDto.workspaceId,
+    );
+    if (!workspaceExist) {
+      throw new NotFoundException(
+        'Workspace not found, you cannot create a column in a non-existing workspace',
+      );
+    }
     const { workspaceId, name, order } = createColumnDto;
     const column = new ColumnList();
 
@@ -67,9 +80,6 @@ export class ColumnService {
         order: 'ASC',
       },
     });
-    if (targetedColumns.length === 0) {
-      throw new Error('Workspace not found');
-    }
 
     const result = await Promise.all(
       targetedColumns.map(async (column): Promise<GetInfoColumnDto> => {
@@ -86,7 +96,7 @@ export class ColumnService {
       where: { id },
     });
     if (!targetColumn) {
-      throw new Error('Column not found');
+      throw new NotFoundException('Column not found');
     }
 
     const result = await this.taskService.findAllByColumn(targetColumn.id);

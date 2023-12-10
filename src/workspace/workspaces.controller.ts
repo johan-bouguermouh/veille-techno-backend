@@ -4,8 +4,9 @@ import { Workspace } from './workspaces.entity';
 import { CreateWorkSpaceDto } from './dto/createWorkspace.dto';
 import { UserAuth } from 'src/auth/auth.decorator';
 import { AuthGuard } from '../auth/guards/auth.guard';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Workspace')
 @Controller('workspace')
 export class WorkspacesController {
   constructor(private readonly workspaceService: WorkspacesService) {}

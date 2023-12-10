@@ -25,4 +25,9 @@ export class WorkspacesService {
   async remove(id: number): Promise<void> {
     await this.workspacesRepository.delete(id);
   }
+
+  async doesWorkspaceExist(id: number): Promise<boolean> {
+    const workspace = await this.workspacesRepository.findOneBy({ id });
+    return !!workspace;
+  }
 }
