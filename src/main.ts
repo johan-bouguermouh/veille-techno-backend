@@ -30,6 +30,17 @@ async function bootstrap() {
       },
       'JWT-auth',
     )
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'X-Refresh-Token',
+        description: 'Enter JWT refresh token',
+        in: 'header',
+      },
+      'JWT-refresh-auth',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config); // add

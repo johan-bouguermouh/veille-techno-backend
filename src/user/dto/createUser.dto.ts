@@ -13,6 +13,8 @@ export class CreateUserDto {
     type: String,
     required: true,
     example: 'jhon.doe@mail.fr',
+    pattern: '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$',
+    uniqueItems: true,
   })
   email: string;
 
@@ -26,7 +28,6 @@ export class CreateUserDto {
     example: 'Jhon Doe',
     minimum: 3,
     maximum: 64,
-    uniqueItems: true,
   })
   name: string;
 

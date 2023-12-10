@@ -7,6 +7,7 @@ import {
   HttpStatus,
   UseGuards,
   Request,
+  Headers,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signIn.dto';
@@ -21,13 +22,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async signIn(@Request() req, @Body() signInDto: SignInDto) {
-    const publicIp =
-      req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    return this.authService.signIn(
-      signInDto.email,
-      signInDto.password,
-      publicIp,
-    );
+    return this.authService.signIn(req, signInDto.email, signInDto.password);
   }
 
   @UseGuards(AuthGuard)
@@ -35,5 +30,14 @@ export class AuthController {
   @ApiBearerAuth('JWT-auth')
   async getMe(@Request() req) {
     return req['user'];
+  }
+
+  @Get('refresh')
+  @HttpCode(HttpStatus.OK)
+  async refresh(
+    @Request() req,
+    @Headers('X-Refresh-Token') refreshToken: string,
+  ) {
+    return this.authService.useRefreshToken(refreshToken, req);
   }
 }

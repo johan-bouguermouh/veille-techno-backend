@@ -8,7 +8,11 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { MaxLength, MinLength } from 'class-validator';
 
 @Entity()
 export class User {
@@ -23,6 +27,8 @@ export class User {
 
   @Column()
   @Exclude()
+  @MaxLength(59)
+  @MinLength(8)
   password: string;
 
   @Column({ nullable: true })
@@ -37,4 +43,22 @@ export class User {
 
   @OneToMany((Type) => Task, (task) => task.author)
   tasks: Task[];
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPassword() {
+    if (this.password && this.password.length < 60) {
+      // bcrypt hashes are 60 characters long
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+  }
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashSession() {
+    // If the session is not hashed do not prefix it with $2 to avoid double hashing
+    if (this.session && !this.session.startsWith('$2')) {
+      this.session = await bcrypt.hash(this.session, 10);
+    }
+  }
 }

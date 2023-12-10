@@ -154,7 +154,9 @@ export class TaskService {
    * @returns {Promise<number>}
    */
   async countChildren(task: Task): Promise<number> {
-    return await this.tasksRepository.count({ where: { parent: task } });
+    return await this.tasksRepository.count({
+      where: { parent: { id: task.id } },
+    });
   }
 
   /**
@@ -164,7 +166,7 @@ export class TaskService {
    */
   async countOpenChildren(task: Task): Promise<number> {
     return await this.tasksRepository.count({
-      where: { parent: task, completedAt: IsNull() },
+      where: { parent: { id: task.id }, completedAt: IsNull() },
     });
   }
 
