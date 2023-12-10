@@ -24,7 +24,7 @@ export class TaskService {
     private columnsService: ColumnService,
   ) {}
 
-  async create(token: any, createTaskDto: CreateTaskDto) {
+  async create(token: any, createTaskDto: CreateTaskDto): Promise<Task> {
     const { title, description, order, columnId, parentTaskId } = createTaskDto;
     const task = new Task();
     let tasks: Task[] = [];
@@ -93,11 +93,7 @@ export class TaskService {
 
     const targetColumn = await this.columnsService.findOne(columnId);
     if (!targetColumn) {
-      //on créer un retour de réponse approprié pour l'utilisateur
-      return {
-        message: 'Column not found',
-        status: 404,
-      };
+      throw new NotFoundException('Column not found');
     }
 
     console.log('task =>', task);
