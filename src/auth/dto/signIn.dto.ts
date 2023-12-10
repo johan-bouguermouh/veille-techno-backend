@@ -8,6 +8,9 @@ export class SignInDto {
     type: String,
     required: true,
     example: 'jhon.doe@mail.fr',
+    minimum: 3,
+    maximum: 64,
+    uniqueItems: true,
   })
   @IsEmail({ allow_display_name: true }, { message: 'Email is not valid' })
   @IsNotEmpty()
@@ -18,6 +21,8 @@ export class SignInDto {
     type: String,
     required: true,
     example: 'Password_123!NotSimple',
+    minimum: 12,
+    pattern: '((?=.*d)|(?=.*W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$',
   })
   @IsNotEmpty()
   password: string;

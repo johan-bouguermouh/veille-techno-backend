@@ -24,6 +24,9 @@ export class CreateUserDto {
     type: String,
     required: true,
     example: 'Jhon Doe',
+    minimum: 3,
+    maximum: 64,
+    uniqueItems: true,
   })
   name: string;
 
@@ -34,6 +37,8 @@ export class CreateUserDto {
     type: String,
     required: true,
     example: 'Password_123!NotSimple',
+    minimum: 12,
+    pattern: '((?=.*d)|(?=.*W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$',
   })
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'password too weak',
