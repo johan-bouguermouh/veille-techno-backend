@@ -56,7 +56,7 @@ export class UsersService {
       req,
     );
 
-    /** A session save it in the database */
+    /** A session save in the database */
     const newSession = this.authService.generateUserSession(result.id, req);
     this.updateRefreshToken(result.id, newSession);
 

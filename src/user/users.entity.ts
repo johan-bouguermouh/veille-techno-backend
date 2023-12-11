@@ -35,13 +35,15 @@ export class User {
   @Exclude()
   session: string;
 
-  @OneToMany((Type) => Workspace, (workspace) => workspace.user)
+  @OneToMany((Type) => Workspace, (workspace) => workspace.user, {
+    onDelete: 'CASCADE',
+  })
   workspaces: Workspace[];
 
   @ManyToOne((Type) => Role, (role) => role.users)
   role: Role;
 
-  @OneToMany((Type) => Task, (task) => task.author)
+  @OneToMany((Type) => Task, (task) => task.author, { onDelete: 'SET NULL' })
   tasks: Task[];
 
   @BeforeInsert()

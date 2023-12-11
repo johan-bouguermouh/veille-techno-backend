@@ -7,6 +7,7 @@ import {
   OneToMany,
   ManyToOne,
   ManyToMany,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -32,15 +33,22 @@ export class Task {
   @Column({ nullable: true })
   completedAt: Date;
 
-  @ManyToOne((Type) => ColumnList, (column) => column.tasks)
+  @ManyToOne((Type) => ColumnList, (column) => column.tasks, {
+    onDelete: 'CASCADE',
+  })
   column: ColumnList;
 
-  @ManyToOne((Type) => Task, (task) => task.children)
+  @ManyToOne((Type) => Task, (task) => task.children, {
+    onDelete: 'CASCADE',
+  })
   parent: Task;
 
-  @OneToMany((Type) => Task, (task) => task.parent)
+  @OneToMany((Type) => Task, (task) => task.parent, {
+    onDelete: 'CASCADE',
+  })
   children: Task[];
 
-  @ManyToOne((Type) => User, (user) => user.tasks)
+  @ManyToOne((Type) => User, (user) => user.tasks, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'authorId' })
   author: User;
 }

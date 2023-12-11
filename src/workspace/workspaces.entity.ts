@@ -10,9 +10,13 @@ export class Workspace {
   @Column()
   name: string;
 
-  @ManyToOne((Type) => User, (user) => user.workspaces)
+  @ManyToOne((Type) => User, (user) => user.workspaces, {
+    onDelete: 'CASCADE',
+  })
   user: User;
 
-  @ManyToOne((Type) => ColumnList, (column) => column.workspace)
+  @ManyToOne((Type) => ColumnList, (column) => column.workspace, {
+    onDelete: 'CASCADE',
+  })
   columns: ColumnList[];
 }

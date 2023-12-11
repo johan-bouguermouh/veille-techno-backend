@@ -19,9 +19,13 @@ export class ColumnList {
   @Column()
   order: number;
 
-  @OneToMany((Type) => Task, (task) => task.column)
+  @OneToMany((Type) => Task, (task) => task.column, {
+    onDelete: 'CASCADE',
+  })
   tasks: Task[];
 
-  @ManyToOne((Type) => Workspace, (workspace) => workspace.columns)
+  @ManyToOne((Type) => Workspace, (workspace) => workspace.columns, {
+    onDelete: 'CASCADE',
+  })
   workspace: Workspace;
 }
