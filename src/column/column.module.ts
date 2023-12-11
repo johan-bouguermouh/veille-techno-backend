@@ -9,7 +9,7 @@ import { TaskModule } from 'src/task/task.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ColumnList]),
-    WorkspacesModule,
+    forwardRef(() => WorkspacesModule),
     forwardRef(() => TaskModule),
   ],
   exports: [TypeOrmModule.forFeature([ColumnList]), ColumnService],

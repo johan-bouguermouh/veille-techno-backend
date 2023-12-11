@@ -1,21 +1,45 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  forwardRef,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Workspace } from './workspaces.entity';
+import { ColumnService } from 'src/column/column.service';
+import { GetInfoWorkspaceDto } from './dto/get-info-workspace.dto';
 
 @Injectable()
 export class WorkspacesService {
   constructor(
     @InjectRepository(Workspace)
     private workspacesRepository: Repository<Workspace>,
+    @Inject(forwardRef(() => ColumnService))
+    private columnsService: ColumnService,
   ) {}
 
-  findAll(): Promise<Workspace[]> {
-    return this.workspacesRepository.find();
+  findAll(userId: number): Promise<Workspace[]> {
+    return this.workspacesRepository.find({
+      where: { user: { id: userId } },
+      relations: ['columns'],
+    });
   }
 
-  findOne(id: number): Promise<Workspace | null> {
-    return this.workspacesRepository.findOneBy({ id });
+  async findOne(workspaceId: number, userId): Promise<GetInfoWorkspaceDto> {
+    const workspace = (await this.workspacesRepository.findOne({
+      where: { id: workspaceId },
+      relations: ['user'],
+    })) as any;
+    if (workspace.user.id !== userId) {
+      throw new UnauthorizedException(
+        'You are not allowed to access this workspace',
+      );
+    }
+    const columnsDetails =
+      await this.columnsService.findAllByWorkSpace(workspaceId);
+    workspace.columns = columnsDetails;
+    return workspace;
   }
 
   async create(workspace: Workspace): Promise<Workspace> {

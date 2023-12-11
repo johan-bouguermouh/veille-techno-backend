@@ -18,11 +18,19 @@ export class ColumnService {
   constructor(
     @InjectRepository(ColumnList)
     private columnsRepository: Repository<ColumnList>,
+    @Inject(forwardRef(() => WorkspacesService))
     private workspacesService: WorkspacesService,
     @Inject(forwardRef(() => TaskService))
     private taskService: TaskService,
   ) {}
 
+  /**
+   * Create a column
+   * If order is defined, all columns with an order greater than or equal to the new column are shifted by one,
+   * if order is not defined, the new column is placed at the end of the list
+   * @param createColumnDto
+   * @returns {Promise<GetInfoColumnDto[]>} Array of columns with their tasks of first level
+   */
   async create(createColumnDto: CreateColumnDto): Promise<GetInfoColumnDto[]> {
     const workspaceExist = await this.workspacesService.doesWorkspaceExist(
       createColumnDto.workspaceId,
@@ -69,6 +77,12 @@ export class ColumnService {
     return result;
   }
 
+  /**
+   * Get all columns of a workspace, ordered by order.
+   * Takes the workspace id as a parameter and returns an array of columns with their tasks of first level.
+   * @param {number} workspaceId
+   * @returns {Promise<GetInfoColumnDto[]>} Array of columns with their tasks of first level
+   */
   async findAllByWorkSpace(workspaceId: number): Promise<GetInfoColumnDto[]> {
     const targetedColumns = await this.columnsRepository.find({
       where: {
@@ -91,6 +105,11 @@ export class ColumnService {
     return result;
   }
 
+  /**
+   * Get a column by its id and return it with its tasks of first level.
+   * @param {number} id
+   * @returns {Promise<GetInfoColumnDto>} A column with its tasks of first level
+   */
   async findOne(id: number): Promise<GetInfoColumnDto> {
     const targetColumn = await this.columnsRepository.findOne({
       where: { id },
@@ -103,6 +122,12 @@ export class ColumnService {
     return { ...targetColumn, tasks: result };
   }
 
+  /**
+   * Update a column
+   * @param {number} id Column id
+   * @param {UpdateColumnDto} updateColumnDto Column data to update
+   * @returns {Promise<ColumnList>} The updated column
+   */
   async update(
     id: number,
     updateColumnDto: UpdateColumnDto,
@@ -111,6 +136,13 @@ export class ColumnService {
     return this.columnsRepository.findOneBy({ id });
   }
 
+  /**
+   * Delete a column
+   * Be careful, this action is irreversible !
+   * Cascade delete on all column's tasks
+   * @param {number} id Column id
+   * @returns {Promise<void>}
+   */
   async remove(id: number): Promise<void> {
     await this.columnsRepository.delete({ id });
   }

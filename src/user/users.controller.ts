@@ -16,7 +16,7 @@ import { UsersService } from './users.service';
 import { User } from './users.entity';
 import { CreateUserForm } from './interfaces/user.interface';
 import { CreateUserDto } from './dto/createUser.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserResponseDto } from './dto/create-user-response.dto';
 
 @ApiTags('User')
