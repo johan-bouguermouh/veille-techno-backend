@@ -83,4 +83,14 @@ export class UsersService {
   async logout(id: number): Promise<void> {
     await this.usersRepository.update(id, { session: null });
   }
+
+  async update(id: number, data: Partial<User>): Promise<User> {
+    await this.usersRepository.update(id, data);
+    const user = await this.usersRepository.findOneBy({ id });
+    if (user) {
+      return user;
+    } else {
+      throw new NotFoundException('User not found');
+    }
+  }
 }
