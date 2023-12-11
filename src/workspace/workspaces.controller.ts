@@ -8,6 +8,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Workspace')
 @Controller('workspace')
+@ApiBearerAuth('JWT-auth')
 export class WorkspacesController {
   constructor(private readonly workspaceService: WorkspacesService) {}
 

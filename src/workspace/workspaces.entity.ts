@@ -1,3 +1,4 @@
+import { MaxLength, MinLength } from 'class-validator';
 import { ColumnList } from 'src/column/entities/columns.entity';
 import { User } from 'src/user/users.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
@@ -8,6 +9,8 @@ export class Workspace {
   id: number;
 
   @Column()
+  @MinLength(3)
+  @MaxLength(50)
   name: string;
 
   @ManyToOne((Type) => User, (user) => user.workspaces, {
