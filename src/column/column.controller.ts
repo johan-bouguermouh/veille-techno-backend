@@ -10,10 +10,16 @@ import {
 import { ColumnService } from './column.service';
 import { CreateColumnDto } from './dto/create-column.dto';
 import { UpdateColumnDto } from './dto/update-column.dto';
-import { ApiTags, ApiOperation, ApiParam } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 
 @ApiTags('Column')
 @Controller('column')
+@ApiBearerAuth('JWT-auth')
 export class ColumnController {
   constructor(private readonly columnService: ColumnService) {}
 
