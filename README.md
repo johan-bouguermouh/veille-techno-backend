@@ -65,7 +65,7 @@ Make sure you have the following prerequisites installed:
 
 In the `.env` file, configure the following keys for your SQL server:
 
-```nest
+```env
 - DATABASE_HOST = '127.0.0.1'
 - DATABASE_PORT = '3306'
 - DATABASE_USER = 'root'
@@ -75,6 +75,7 @@ In the `.env` file, configure the following keys for your SQL server:
 - SALT_ROUNDS = '$2b$10$O7nIevyFyqaRhv6l4calKu'
 - CRYPTO_KEY = 'e/guPMuuvVEGvgkoGE9xtZMonJD+5ADJa1YwQ6ItUZSlpBFjjRYgRfYBZ45H4OWF'
 ```
+**warning** : Those environment variables are provided to facilitate the testing of this exercise. If you intend to use this software for real work, remember to add it to the .gitignore file and modify these publicly accessible variables.
 
 **Note:** The script uses users' IP addresses hashed on the backend and encrypted on the frontend. Exercise caution for this usage, ensuring that the refreshToken cannot be usurped by a third party.
 
