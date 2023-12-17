@@ -1,34 +1,97 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS TodoList API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A project focused on conducting a technological watch to understand the advantages and disadvantages of the NestJS framework through the creation of an API for a todo list.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
 
-## Description
+1. [Introduction](#introduction)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+   - [Project Overview](#project-overview)
+   - [Objective](#objective)
+
+2. [Installation](#installation)
+
+   - [Prerequisites](#prerequisites)
+   - [Database Configuration](#database-configuration)
+   - [Setup](#setup)
+
+3. [Usage](#usage)
+
+   - [Configuration](#configuration)
+   - [Endpoints](#endpoints)
+     - [API Documentation](#api-documentation)
+
+4. [Running the App](#running-the-app)
+
+   - [Development](#development)
+   - [Watch Mode](#watch-mode)
+   - [Production Mode](#production-mode)
+
+5. [Packages](#packages)
+
+   - [Dependencies](#dependencies)
+   - [Installation of Packages](#installation-of-packages)
+
+6. [Contributing](#contributing)
+
+   - [Guidelines](#contribution-guidelines)
+   - [Reporting Issues](#reporting-issues)
+
+7. [License](#license)
+
+8. [Acknowledgments](#acknowledgments)
+
+## Introduction
+
+### Project Overview
+
+This project serves as a platform for conducting a technological watch, specifically focusing on evaluating the NestJS framework. The implementation involves creating a robust API for managing a todo list.
+
+### Objective
+
+The primary goal of this project is to explore and understand the advantages and disadvantages of NestJS in the context of building a todo list API. Through this endeavor, we aim to gain insights into the framework's features, performance, and suitability for real-world applications.
 
 ## Installation
 
+### Prerequisites
+
+Make sure you have the following prerequisites installed:
+
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/) (Node Package Manager)
+- A valid SQL server, either local or remote.
+
+### Database Configuration
+
+In the `.env` file, configure the following keys for your SQL server:
+
+```nest
+- DATABASE_HOST = '127.0.0.1'
+- DATABASE_PORT = '3306'
+- DATABASE_USER = 'root'
+- DATABASE_PASSWORD = ''
+- DATABASE_NAME = 'nestjs'
+- JWT_SECRET = '98874814F23FCDD9F3ED978E8527A'
+- SALT_ROUNDS = '$2b$10$O7nIevyFyqaRhv6l4calKu'
+- CRYPTO_KEY = 'e/guPMuuvVEGvgkoGE9xtZMonJD+5ADJa1YwQ6ItUZSlpBFjjRYgRfYBZ45H4OWF'
+```
+
+**Note:** The script uses users' IP addresses hashed on the backend and encrypted on the frontend. Exercise caution for this usage, ensuring that the refreshToken cannot be usurped by a third party.
+
+### Setup
+
+Follow these steps to set up the project locally:
+
+- Clone the repository:
+
+```
+gh repo clone johan-bouguermouh/veille-techno-backend
+```
+
+- Navigate to the project directory:
+
 ```bash
+$ cd veille-techno-backend
 $ npm install
 ```
 
@@ -45,28 +108,75 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## Usage
+
+### Configuration
+
+Adjust the configuration settings as needed. This may include environment variables, database connections, or any other project-specific settings.
+
+### Endpoints
+
+Document the available API endpoints and their functionalities here.
+
+#### API Documentation
+
+Access the Swagger documentation by navigating to the `/api` endpoint. This will provide detailed information about the available routes and DTOs for each entity.
+
+## Running the App
+
+To run the application in different modes, use the following commands:
+
+### Development
+
+- Run: `npm run start`
+
+### Watch Mode
+
+- Run: `npm run start:dev`
+
+### Production Mode
+
+- Run: `npm run start:prod`
+
+## Packages
+
+### Dependencies
+
+List of dependencies used in this project:
+
+- @nestjs/common: ^10.0.0
+- @nestjs/config: ^3.1.1
+- @nestjs/core: ^10.0.0
+- @nestjs/jwt: ^10.2.0
+- @nestjs/platform-express: ^10.0.0
+- @nestjs/swagger: ^7.1.16
+- @nestjs/typeorm: ^10.0.1
+- bcrypt: ^5.1.1
+- class-transformer: ^0.5.1
+- class-validator: ^0.14.0
+- mysql2: ^3.6.5
+- reflect-metadata: ^0.1.13
+- rxjs: ^7.8.1
+- typeorm: ^0.3.17
+- typeorm-extension: ^3.2.0
+
+### Installation of Packages
+
+To install project dependencies, run the following command:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install`
 ```
 
-## Support
+## Contributing
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Contribution Guidelines
 
-## Stay in touch
+If you'd like to contribute to the project, please follow the guidelines outlined in CONTRIBUTING.md.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Reporting Issues
+
+If you encounter any issues or have suggestions, please report them on the issue tracker.
 
 ## License
 
