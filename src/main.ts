@@ -4,6 +4,10 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'; // add
 import { NotFoundException, ValidationPipe } from '@nestjs/common';
 import { UniqueConstraintViolationFilter } from './filters/user-email-unique.filter';
 import { NotFoundExceptionFilter } from './filters/not-found-exception.filter';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const readme = readFileSync(join(__dirname, '../README.swagger.md'), 'utf8');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,9 +18,8 @@ async function bootstrap() {
   });
   const config = new DocumentBuilder() // add
     .setTitle('NestJS API example')
-    .setDescription(
-      "Vous trouverez ici la documentation de l'API de notre projet sur NestJS",
-    )
+    //we create description in markdown
+    .setDescription(readme)
     .setVersion('1.0')
     .addTag('NestJS')
     .addBearerAuth(
