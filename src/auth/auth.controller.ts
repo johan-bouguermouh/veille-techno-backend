@@ -33,12 +33,21 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('me')
   @ApiBearerAuth('JWT-auth')
+  @ApiOperation({
+    summary: 'Payload of JWT token',
+    description: 'Get payload of JWT token',
+  })
   async getMe(@Request() req) {
     return req['user'];
   }
 
   @Get('refresh')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Refresh JWT token',
+    description:
+      'Refresh JWT token with refresh token, use it in headers with key X-Refresh-Token name',
+  })
   async refresh(
     @Request() req,
     @Headers('X-Refresh-Token') refreshToken: string,

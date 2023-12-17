@@ -66,11 +66,20 @@ export class ColumnController {
   }
 
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Update a column',
+    description: 'Update a column',
+  })
   update(@Param('id') id: string, @Body() updateColumnDto: UpdateColumnDto) {
     return this.columnService.update(+id, updateColumnDto);
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete a column',
+    description:
+      'Delete a column. Be careful, this action is irreversible. All tasks of this column will be deleted.',
+  })
   remove(@Param('id') id: string) {
     return this.columnService.remove(+id);
   }

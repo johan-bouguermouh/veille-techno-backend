@@ -17,12 +17,12 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Task')
 @Controller('task')
+@UseGuards(AuthGuard)
+@ApiBearerAuth('JWT-auth')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Create a task',
     description:
@@ -33,21 +33,41 @@ export class TaskController {
   }
 
   @Get('/column/:columnId')
+  @ApiOperation({
+    summary: 'Get all tasks of a column',
+    description:
+      'Get all tasks of a column, ordered by order. Takes the column id as a parameter and returns an array of tasks. Tasks is detailed in the GetInfoTaskDto.',
+  })
   findAll(@Param('columnId') columnId: string) {
     return this.taskService.findAllByColumn(+columnId);
   }
 
   @Get(':taskId')
+  @ApiOperation({
+    summary: 'Get a task',
+    description:
+      'Get a task by its id and return it. The task is detailed in the GetInfoTaskDto in the first level.',
+  })
   findOne(@Param('taskId') taskId: string) {
     return this.taskService.findOne(+taskId);
   }
 
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Update a task',
+    description:
+      'Update a task by its id and return it. The task is detailed in the GetInfoTaskDto in the first level.',
+  })
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.taskService.update(+id, updateTaskDto);
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete a task',
+    description:
+      'Delete a task by its id and return it. Becareful, if the task has children, they will be deleted too.',
+  })
   remove(@Param('id') id: string) {
     return this.taskService.remove(+id);
   }
