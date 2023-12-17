@@ -85,7 +85,7 @@ Follow these steps to set up the project locally:
 - Clone the repository:
 
 ```
-gh repo clone johan-bouguermouh/veille-techno-backend
+git repo clone johan-bouguermouh/veille-techno-backend
 ```
 
 - Navigate to the project directory:
